@@ -1,0 +1,16 @@
+O programa foi desenvolvido para monitorar a temperatura e a umidade do ambiente utilizando o sensor DHT11.
+Quando o Arduino é ligado, ele inicializa o display LCD, o sensor DHT11, a comunicação serial e o módulo Bluet
+ooth. Em seguida, o sistema entra em um ciclo contínuo, realizando a leitura da temperatura e da umidade do a
+r a cada poucos segundos.
+
+Os valores obtidos são exibidos no display LCD para que o usuário possa visualizá-los 
+em tempo real. Além disso, essas mesmas informações são enviadas para o Monitor Serial d
+o Arduino IDE e também para o módulo Bluetooth HC-05, permitindo que sejam visualizadas em um celular conectado.
+
+O programa também possui um sistema de alerta. Se a umidade do ar ficar abaixo de 40%,
+o buzzer é acionado por meio segundo, emitindo um sinal sonoro para avisar que a umidade está baixa. 
+Caso o sensor DHT11 apresente algum problema durante a leitura, o sistema exibe a mensagem "Erro DHT11" no 
+display LCD e informa o erro tanto no Monitor Serial quanto pelo Bluetooth.
+
+Após concluir todas essas etapas, o Arduino aguarda três segundos e repete todo o processo, mantendo o 
+monitoramento contínuo do ambiente.
