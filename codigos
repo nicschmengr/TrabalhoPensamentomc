@@ -1,0 +1,83 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include <DHT11.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+DHT11 dht11(2); // DHT11 no pino 2
+
+const int buzzer = 8; // Buzzer no pino 8
+
+void setup() {
+  lcd.init();
+  lcd.backlight();
+
+  pinMode(buzzer, OUTPUT);
+  noTone(buzzer);
+
+  Serial.begin(9600);   // Monitor Serial
+  Serial1.begin(9600);  // Bluetooth HC-05
+}
+
+void loop() {
+
+  int temperatura = 0;
+  int umidade = 0;
+
+  int resultado = dht11.readTemperatureHumidity(temperatura, umidade);
+
+  if (resultado == 0) {
+
+    // LCD
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Temp:");
+    lcd.print(temperatura);
+    lcd.print((char)223);
+    lcd.print("C");
+
+    lcd.setCursor(0, 1);
+    lcd.print("Umid:");
+    lcd.print(umidade);
+    lcd.print("%");
+
+    // Monitor Serial
+    Serial.print("Temperatura: ");
+    Serial.print(temperatura);
+    Serial.print(" C  ");
+
+    Serial.print("Umidade: ");
+    Serial.print(umidade);
+    Serial.println("%");
+
+    // Bluetooth
+    Serial1.print("Temperatura: ");
+    Serial1.print(temperatura);
+    Serial1.print(" C  ");
+
+    Serial1.print("Umidade: ");
+    Serial1.print(umidade);
+    Serial1.println("%");
+
+    // Buzzer toca apenas quando a umidade estiver abaixo de 40%
+    if (umidade < 40) {
+      tone(buzzer, 1000);
+      delay(500);
+      noTone(buzzer);
+    } else {
+      noTone(buzzer);
+    }
+
+  } else {
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Erro DHT11");
+
+    Serial.println("Erro no DHT11");
+    Serial1.println("Erro no DHT11");
+
+    noTone(buzzer);
+  }
+
+  delay(3000);
+}
